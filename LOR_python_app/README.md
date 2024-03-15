@@ -1,1 +1,0 @@
-# LOR_python_app
