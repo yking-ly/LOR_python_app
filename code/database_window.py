@@ -4,7 +4,6 @@ from email.message import EmailMessage
 from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QPushButton, QMessageBox
 from PyQt6.uic import loadUi
 import sqlite3
-# ok
 
 
 class DatabaseWindow(QMainWindow):
