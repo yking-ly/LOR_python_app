@@ -62,6 +62,7 @@ class Login(QMainWindow):
             print("Error occurred while authenticating:", e)
             return False
 
+
     def check_admin(self, professor_id):
         try:
             connection = sqlite3.connect("../database/admin.db")
