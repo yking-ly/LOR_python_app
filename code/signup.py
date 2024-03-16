@@ -114,3 +114,4 @@ class SignUpWindow(QMainWindow):
             print("Error occurred while checking username existence:", e)
             return False
 
+print("hello")
