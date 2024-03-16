@@ -113,5 +113,3 @@ class SignUpWindow(QMainWindow):
         except Exception as e:
             print("Error occurred while checking username existence:", e)
             return False
-
-print("hello")
