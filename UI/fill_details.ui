@@ -60,7 +60,7 @@
         <string notr="true">font: 16pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="text">
-        <string>Phone Number:</string>
+        <string>Requirement:</string>
        </property>
       </widget>
       <widget class="QLabel" name="branch_label">
@@ -121,6 +121,14 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>16</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">font: 16pt &quot;Times New Roman&quot;;</string>
@@ -231,7 +239,7 @@ font: 20pt &quot;Segoe UI&quot;;</string>
         </font>
        </property>
       </widget>
-      <widget class="QLineEdit" name="phone_input">
+      <widget class="QComboBox" name="phone_input">
        <property name="geometry">
         <rect>
          <x>330</x>
@@ -240,23 +248,19 @@ font: 20pt &quot;Segoe UI&quot;;</string>
          <height>30</height>
         </rect>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;Segoe UI&quot;;</string>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>15</pointsize>
-        </font>
-       </property>
+       <item>
+        <property name="text">
+         <string>Higher Studies</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Professional</string>
+        </property>
+       </item>
       </widget>
       <widget class="QLineEdit" name="branch_input">
        <property name="enabled">
@@ -317,7 +321,4 @@ font: 20pt &quot;Segoe UI&quot;;</string>
  </widget>
  <resources/>
  <connections/>
- <slots>
-  <slot>generate_recommendation_letter()</slot>
- </slots>
 </ui>

@@ -22,8 +22,8 @@ class DatabaseWindow(QMainWindow):
         self.tableWidget.setColumnCount(10)  # Increase the column count to accommodate the Reject button
 
         # Set column names
-        column_names = ["username", "email", "password", "full-name", "branch", "specialization", "Phone",
-                        "Generate LOR", "Delete", "Reject"]
+        column_names = ["username", "email", "password", "full-name", "branch", "specialization", "Requirement",
+                        "Generate LOR", "Reject", "Delete"]
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
         self.populate_table(data)
@@ -39,7 +39,7 @@ class DatabaseWindow(QMainWindow):
             # Add delete button to the second last column of each row
             delete_button = QPushButton("Delete")
             delete_button.clicked.connect(lambda _, row=row_num: self.delete_row(row))
-            self.tableWidget.setCellWidget(row_num, 8, delete_button)
+            self.tableWidget.setCellWidget(row_num, 9, delete_button)
 
             # Add "Generate LOR" button to the second last column of each row
             generate_lor_button = QPushButton("Generate LOR")
@@ -49,7 +49,7 @@ class DatabaseWindow(QMainWindow):
             # Add "Reject" button to the last column of each row
             reject_button = QPushButton("Reject")
             reject_button.clicked.connect(lambda _, row=row_num: self.reject_application(row))
-            self.tableWidget.setCellWidget(row_num, 9, reject_button)
+            self.tableWidget.setCellWidget(row_num, 8, reject_button)
 
     def reject_application(self, row):
         try:
