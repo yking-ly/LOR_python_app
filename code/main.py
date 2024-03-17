@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QApplication
-from LOR_python_app.code.login import Login
+from LOR_python_app.code.login import
+# ok
 
 def main():
     app = QApplication([])
