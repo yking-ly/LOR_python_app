@@ -87,7 +87,7 @@ class FillDetailsWindow(QMainWindow):
 
         # Check if any required field is empty
         if not all([full_name, branch, specialization, phone]):
-            self.send_email_notification()
+            QMessageBox.warning(self, "Error", "Please fill in all details.")
             return
 
         # Connect to the database and update user details
