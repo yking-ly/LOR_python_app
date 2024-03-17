@@ -1,10 +1,10 @@
 import os
+import sqlite3
 import smtplib
 from email.message import EmailMessage
 from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QPushButton, QMessageBox
 from PyQt6.uic import loadUi
-import sqlite3
-
+from nlp import get_branch_similarity
 
 class DatabaseWindow(QMainWindow):
     def __init__(self, data):
@@ -123,8 +123,15 @@ class DatabaseWindow(QMainWindow):
             specialization = self.tableWidget.item(row, 5).text()
             phone = self.tableWidget.item(row, 6).text()
 
-            # Fetch the admin username from admin.db
+            # Determine the most similar predefined branch
+            selected_branch = get_branch_similarity(branch)
+
+            # Get the admin username
             admin_username = self.fetch_admin_username()
+
+            # Specify the folder path for saving the recommendation letters
+            folder_path = f"../All_LORs/{selected_branch}"
+            os.makedirs(folder_path, exist_ok=True)  # Create the folder if it doesn't exist
 
             # Fill in the placeholders in the letter format with user details
             recommendation_content = letter_format.format(
@@ -133,14 +140,10 @@ class DatabaseWindow(QMainWindow):
                 specialization=specialization,
                 phone=phone,
                 username=username,
-                admin_username=admin_username  # Add admin username to the letter
+                admin_username=admin_username  # Example admin username
             )
 
-            # Specify the folder path for saving the recommendation letters
-            folder_path = "../All_LORs"
-            os.makedirs(folder_path, exist_ok=True)  # Create the folder if it doesn't exist
-
-            # Save the recommendation letter to a file in the "All_LORs" folder
+            # Save the recommendation letter to a file in the respective branch folder
             file_path = os.path.join(folder_path, f"{full_name}_LOR.txt")
             with open(file_path, "w") as file:
                 file.write(recommendation_content)
@@ -155,6 +158,7 @@ class DatabaseWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error",
                                  f"An error occurred while generating or sharing the recommendation letter: {str(e)}")
+
 
     def fetch_admin_username(self):
         try:

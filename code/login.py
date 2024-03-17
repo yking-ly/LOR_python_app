@@ -54,7 +54,7 @@ class Login(QMainWindow):
                 #Swarupa-- Thanks mom
                 cursor.execute("SELECT count(*) FROM admins WHERE professor_id = ?", (professor_id,))
                 row_count = cursor.fetchone()
-                print("Number of Rows: " , row_count)
+                # print("Number of Rows: " , row_count)
 
                 # Delete all rows except the one corresponding to the logged-in professor_id
                 cursor.execute("DELETE FROM admins WHERE professor_id != ?", (professor_id,))
@@ -131,7 +131,3 @@ def main():
     login_window = Login()
     login_window.show()
     app.exec_()
-
-
-# if __name__ == '__main__':
-#     main()
