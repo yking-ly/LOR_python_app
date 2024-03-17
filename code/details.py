@@ -69,7 +69,8 @@ class FillDetailsWindow(QMainWindow):
                 self.full_name_input.setText(full_name)
                 self.branch_input.setText(branch)
                 self.specialization_input.setText(specialization)
-                self.phone_input.setText(phone)
+                self.phone_input.setCurrentText(phone)
+
 
             # Close the connection
             connection.close()
@@ -82,7 +83,7 @@ class FillDetailsWindow(QMainWindow):
         full_name = self.full_name_input.text()
         branch = self.branch_input.text()
         specialization = self.specialization_input.text()
-        phone = self.phone_input.text()
+        phone = self.phone_input.currentText()  # Get the currently selected option
 
         # Check if any required field is empty
         if not all([full_name, branch, specialization, phone]):
