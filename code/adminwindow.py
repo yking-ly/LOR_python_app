@@ -35,8 +35,8 @@ class AdminWindow(QMainWindow):
         try:
             connection = sqlite3.connect("../database/admin.db")
             cursor = connection.cursor()
-            cursor.execute("CREATE TABLE IF NOT EXISTS admins (username TEXT, password TEXT, professor_id INTEGER)")
-            cursor.execute("INSERT INTO admins (username, password, professor_id) VALUES (?, ?, ?)",
+            cursor.execute("CREATE TABLE IF NOT EXISTS admins (username TEXT, password_admin TEXT, professor_id INTEGER)")
+            cursor.execute("INSERT INTO admins (username, password_admin, professor_id) VALUES (?, ?, ?)",
                            (username, password, professor_id_int))
             connection.commit()
             connection.close()

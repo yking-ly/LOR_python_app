@@ -170,4 +170,3 @@ class DatabaseWindow(QMainWindow):
 
     def closeEvent(self, event):
         self.db_connection.close()
-

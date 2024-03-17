@@ -1,4 +1,5 @@
-[Recommender's Name]
+From
+{admin_username}
 [Date]
 
 To
@@ -16,5 +17,5 @@ I have no doubt that {full_name} will continue to thrive and excel in their acad
 
 Sincerely,
 
-[Recommender's Name]
+{admin_username}
 [SFIT]
