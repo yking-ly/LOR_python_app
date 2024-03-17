@@ -1,6 +1,5 @@
 From
 {admin_username}
-[Date]
 
 To
 Whom It May Concern,

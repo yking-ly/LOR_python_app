@@ -1,10 +1,10 @@
 import os
+import sqlite3
 import smtplib
 from email.message import EmailMessage
 from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QPushButton, QMessageBox
 from PyQt6.uic import loadUi
-import sqlite3
-
+from nlp import get_branch_similarity
 
 class DatabaseWindow(QMainWindow):
     def __init__(self, data):
@@ -100,8 +100,20 @@ class DatabaseWindow(QMainWindow):
 
     def generate_lor(self, row):
         try:
-            # Read the letter format from a text file
-            with open("../LOR.txt", "r") as file:
+            # Get the value in the 6th column (Requirement)
+            requirement = self.tableWidget.item(row, 6).text()
+
+            # Read the appropriate letter format from a text file based on the requirement
+            if requirement == "Higher Studies":
+                letter_file_path = "../LOR.txt"
+            elif requirement == "Professional":
+                letter_file_path = "../LOR1.txt"
+            else:
+                QMessageBox.warning(self, "Invalid Requirement",
+                                    "Requirement must be either 'Higher Studies' or 'Professional'.")
+                return
+
+            with open(letter_file_path, "r") as file:
                 letter_format = file.read()
 
             # Get user details from the table
@@ -111,20 +123,27 @@ class DatabaseWindow(QMainWindow):
             specialization = self.tableWidget.item(row, 5).text()
             phone = self.tableWidget.item(row, 6).text()
 
+            # Determine the most similar predefined branch
+            selected_branch = get_branch_similarity(branch)
+
+            # Get the admin username
+            admin_username = self.fetch_admin_username()
+
+            # Specify the folder path for saving the recommendation letters
+            folder_path = f"../All_LORs/{selected_branch}"
+            os.makedirs(folder_path, exist_ok=True)  # Create the folder if it doesn't exist
+
             # Fill in the placeholders in the letter format with user details
             recommendation_content = letter_format.format(
                 full_name=full_name,
                 branch=branch,
                 specialization=specialization,
                 phone=phone,
-                username=username
+                username=username,
+                admin_username=admin_username  # Example admin username
             )
 
-            # Specify the folder path for saving the recommendation letters
-            folder_path = "../All_LORs"
-            os.makedirs(folder_path, exist_ok=True)  # Create the folder if it doesn't exist
-
-            # Save the recommendation letter to a file in the "All_LORs" folder
+            # Save the recommendation letter to a file in the respective branch folder
             file_path = os.path.join(folder_path, f"{full_name}_LOR.txt")
             with open(file_path, "w") as file:
                 file.write(recommendation_content)
@@ -139,6 +158,24 @@ class DatabaseWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error",
                                  f"An error occurred while generating or sharing the recommendation letter: {str(e)}")
+
+
+    def fetch_admin_username(self):
+        try:
+            # Connect to the admin.db database
+            admin_db_connection = sqlite3.connect("../database/admin.db")
+            admin_cursor = admin_db_connection.cursor()
+
+            # Fetch the admin username from admin.db
+            admin_cursor.execute("SELECT username FROM admins LIMIT 1")
+            admin_username = admin_cursor.fetchone()[0]  # Fetch the first row and extract the username
+
+            # Close the admin database connection
+            admin_db_connection.close()
+
+            return admin_username
+        except Exception as e:
+            print("Error fetching admin username:", e)
 
     def send_email(self, recipient_email, attachment_path):
         try:
