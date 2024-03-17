@@ -1,9 +1,6 @@
 import sqlite3
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
 from PyQt6.uic import loadUi
-import smtplib
-import os
-from email.message import EmailMessage
 from dotenv import load_dotenv
 
 load_dotenv()

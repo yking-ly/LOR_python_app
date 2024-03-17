@@ -36,15 +36,39 @@ class Login(QMainWindow):
         self.signup_window = SignUpWindow()
         self.signup_window.show()
 
-    def authenticate(self, username, password,professor_id):
+    def authenticate(self, username, password, professor_id):
         try:
             connection = sqlite3.connect("../database/admin.db")
             cursor = connection.cursor()
-            cursor.execute("SELECT * FROM admins WHERE professor_id = ? AND password_admin = ?", (professor_id, password))
-            admin = cursor.fetchone()
-            connection.close()
 
-            if admin is not None:
+            # Fetch the row corresponding to the logged-in professor_id
+            cursor.execute("SELECT * FROM admins WHERE professor_id = ? AND password_admin = ?",
+                           (professor_id, password))
+            admin_row = cursor.fetchone()
+            print(professor_id)
+            if admin_row is not None:
+                # Fetch all rows except the one corresponding to the logged-in professor_id
+                cursor.execute("SELECT * FROM admins WHERE professor_id != ?", (professor_id,))
+                remaining_rows = cursor.fetchall()
+
+                #Swarupa-- Thanks mom
+                cursor.execute("SELECT count(*) FROM admins WHERE professor_id = ?", (professor_id,))
+                row_count = cursor.fetchone()
+                print("Number of Rows: " , row_count)
+
+                # Delete all rows except the one corresponding to the logged-in professor_id
+                cursor.execute("DELETE FROM admins WHERE professor_id != ?", (professor_id,))
+                if row_count == 0:
+                    # Re-insert the row corresponding to the logged-in professor_id at the top
+                    cursor.execute("INSERT INTO admins (username, password_admin, professor_id) VALUES (?, ?, ?)",
+                                   admin_row)
+
+                # Re-insert the remaining rows below the moved row
+                for row in remaining_rows:
+                     cursor.execute("INSERT INTO admins (username, password_admin, professor_id) VALUES (?, ?, ?)", row)
+
+                connection.commit()  # Commit the changes
+                connection.close()
                 return True
             else:
                 # Check if the user exists in the signup database
@@ -61,7 +85,6 @@ class Login(QMainWindow):
         except Exception as e:
             print("Error occurred while authenticating:", e)
             return False
-
 
     def check_admin(self, professor_id):
         try:
@@ -110,5 +133,5 @@ def main():
     app.exec_()
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

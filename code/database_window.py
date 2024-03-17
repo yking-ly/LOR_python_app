@@ -100,8 +100,20 @@ class DatabaseWindow(QMainWindow):
 
     def generate_lor(self, row):
         try:
-            # Read the letter format from a text file
-            with open("../LOR.txt", "r") as file:
+            # Get the value in the 6th column (Requirement)
+            requirement = self.tableWidget.item(row, 6).text()
+
+            # Read the appropriate letter format from a text file based on the requirement
+            if requirement == "Higher Studies":
+                letter_file_path = "../LOR.txt"
+            elif requirement == "Professional":
+                letter_file_path = "../LOR1.txt"
+            else:
+                QMessageBox.warning(self, "Invalid Requirement",
+                                    "Requirement must be either 'Higher Studies' or 'Professional'.")
+                return
+
+            with open(letter_file_path, "r") as file:
                 letter_format = file.read()
 
             # Get user details from the table
@@ -111,13 +123,17 @@ class DatabaseWindow(QMainWindow):
             specialization = self.tableWidget.item(row, 5).text()
             phone = self.tableWidget.item(row, 6).text()
 
+            # Fetch the admin username from admin.db
+            admin_username = self.fetch_admin_username()
+
             # Fill in the placeholders in the letter format with user details
             recommendation_content = letter_format.format(
                 full_name=full_name,
                 branch=branch,
                 specialization=specialization,
                 phone=phone,
-                username=username
+                username=username,
+                admin_username=admin_username  # Add admin username to the letter
             )
 
             # Specify the folder path for saving the recommendation letters
@@ -139,6 +155,23 @@ class DatabaseWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error",
                                  f"An error occurred while generating or sharing the recommendation letter: {str(e)}")
+
+    def fetch_admin_username(self):
+        try:
+            # Connect to the admin.db database
+            admin_db_connection = sqlite3.connect("../database/admin.db")
+            admin_cursor = admin_db_connection.cursor()
+
+            # Fetch the admin username from admin.db
+            admin_cursor.execute("SELECT username FROM admins LIMIT 1")
+            admin_username = admin_cursor.fetchone()[0]  # Fetch the first row and extract the username
+
+            # Close the admin database connection
+            admin_db_connection.close()
+
+            return admin_username
+        except Exception as e:
+            print("Error fetching admin username:", e)
 
     def send_email(self, recipient_email, attachment_path):
         try:
