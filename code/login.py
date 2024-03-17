@@ -40,7 +40,7 @@ class Login(QMainWindow):
         try:
             connection = sqlite3.connect("../database/admin.db")
             cursor = connection.cursor()
-            cursor.execute("SELECT * FROM admins WHERE professor_id = ? AND password = ?", (professor_id, password))
+            cursor.execute("SELECT * FROM admins WHERE professor_id = ? AND password_admin = ?", (professor_id, password))
             admin = cursor.fetchone()
             connection.close()
 
