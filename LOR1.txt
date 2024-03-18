@@ -2,7 +2,7 @@ From {admin_username}
 
 To Whom It May Concern,
 
-I am delighted to provide my wholehearted endorsement for {full_name}, a consummate professional with a fervent dedication to their career and a robust background in {specialization}.
+I am delighted to provide my wholehearted endorsement for {full_name}, a consummate professional with a fervent dedication to their career and a robust background in {branch}.
 
 {full_name} has consistently showcased unwavering commitment and excellence in their professional undertakings, particularly within the realm of {specialization}. Throughout their career journey, they have demonstrated a stellar work ethic, an insatiable thirst for knowledge, and exceptional proficiency in their chosen domain.
 
