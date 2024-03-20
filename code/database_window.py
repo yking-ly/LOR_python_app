@@ -4,6 +4,7 @@ import smtplib
 from email.message import EmailMessage
 from PyQt6.QtWidgets import QMainWindow, QTableWidget, QTableWidgetItem, QPushButton, QMessageBox
 from PyQt6.uic import loadUi
+from docx import Document
 from nlp import get_branch_similarity
 
 class DatabaseWindow(QMainWindow):
@@ -103,18 +104,18 @@ class DatabaseWindow(QMainWindow):
             # Get the value in the 6th column (Requirement)
             requirement = self.tableWidget.item(row, 6).text()
 
-            # Read the appropriate letter format from a text file based on the requirement
+            # Select the appropriate letter format based on the requirement
             if requirement == "Higher Studies":
-                letter_file_path = "../LOR.txt"
+                letter_template_path = "../LOR.docx"
             elif requirement == "Professional":
-                letter_file_path = "../LOR1.txt"
+                letter_template_path = "../LOR1.docx"
             else:
                 QMessageBox.warning(self, "Invalid Requirement",
                                     "Requirement must be either 'Higher Studies' or 'Professional'.")
                 return
 
-            with open(letter_file_path, "r") as file:
-                letter_format = file.read()
+            # Open the letter template
+            doc = Document(letter_template_path)
 
             # Get user details from the table
             username = self.tableWidget.item(row, 0).text()
@@ -129,24 +130,28 @@ class DatabaseWindow(QMainWindow):
             # Get the admin username
             admin_username = self.fetch_admin_username()
 
+            # Fill in the placeholders in the letter template with user details
+            for paragraph in doc.paragraphs:
+                if "{full_name}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{full_name}", full_name)
+                if "{branch}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{branch}", branch)
+                if "{specialization}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{specialization}", specialization)
+                if "{phone}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{phone}", phone)
+                if "{username}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{username}", username)
+                if "{admin_username}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{admin_username}", admin_username)
+
             # Specify the folder path for saving the recommendation letters
             folder_path = f"../All_LORs/{selected_branch}"
             os.makedirs(folder_path, exist_ok=True)  # Create the folder if it doesn't exist
 
-            # Fill in the placeholders in the letter format with user details
-            recommendation_content = letter_format.format(
-                full_name=full_name,
-                branch=branch,
-                specialization=specialization,
-                phone=phone,
-                username=username,
-                admin_username=admin_username  # Example admin username
-            )
-
-            # Save the recommendation letter to a file in the respective branch folder
-            file_path = os.path.join(folder_path, f"{full_name}_LOR.txt")
-            with open(file_path, "w") as file:
-                file.write(recommendation_content)
+            # Save the recommendation letter as a Word document
+            file_path = os.path.join(folder_path, f"{full_name}_LOR.docx")
+            doc.save(file_path)
 
             QMessageBox.information(self, "Recommendation Letter Generated",
                                     "The recommendation letter has been generated and saved.")
