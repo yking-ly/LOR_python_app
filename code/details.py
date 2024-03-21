@@ -30,7 +30,8 @@ class FillDetailsWindow(QMainWindow):
         # Load saved values
         self.load_saved_values(username)
 
-
+        # Set default gender value to Male
+        self.gender_input.setCurrentText("Male")
 
     def update_users_table(self):
         try:
@@ -40,7 +41,7 @@ class FillDetailsWindow(QMainWindow):
             # Check if the columns already exist
             cursor.execute("PRAGMA table_info(users)")
             columns = [column[1] for column in cursor.fetchall()]
-            required_columns = ["full_name", "branch", "specialization", "phone"]
+            required_columns = ["full_name", "branch", "specialization", "phone", "gender"]  # Include 'gender'
 
             # Add the columns that do not exist
             for column in required_columns:
@@ -57,17 +58,17 @@ class FillDetailsWindow(QMainWindow):
             cursor = connection.cursor()
 
             # Fetch user details from the database
-            cursor.execute("SELECT full_name, branch, specialization, phone FROM users WHERE name = ?", (username,))
+            cursor.execute("SELECT full_name, branch, specialization, phone, gender FROM users WHERE name = ?", (username,))
             user_details = cursor.fetchone()
 
             if user_details:
                 # Populate input fields with saved values
-                full_name, branch, specialization, phone = user_details
+                full_name, branch, specialization, phone, gender = user_details
                 self.full_name_input.setText(full_name)
                 self.branch_input.setText(branch)
                 self.specialization_input.setText(specialization)
                 self.phone_input.setCurrentText(phone)
-
+                self.gender_input.setCurrentText(gender)
 
             # Close the connection
             connection.close()
@@ -81,9 +82,10 @@ class FillDetailsWindow(QMainWindow):
         branch = self.branch_input.text()
         specialization = self.specialization_input.text()
         phone = self.phone_input.currentText()  # Get the currently selected option
+        gender = self.gender_input.currentText()
 
         # Check if any required field is empty
-        if not all([full_name, branch, specialization, phone]):
+        if not all([full_name, branch, specialization, phone, gender]):
             QMessageBox.warning(self, "Error", "Please fill in all details.")
             return
 
@@ -93,8 +95,8 @@ class FillDetailsWindow(QMainWindow):
             cursor = connection.cursor()
 
             # Update the user details in the database
-            cursor.execute("UPDATE users SET full_name = ?, branch = ?, specialization = ?, phone = ? WHERE name = ?",
-                           (full_name, branch, specialization, phone, self.username))
+            cursor.execute("UPDATE users SET full_name = ?, branch = ?, specialization = ?, phone = ?, gender = ? WHERE name = ?",
+                           (full_name, branch, specialization, phone, gender, self.username))
 
             # Commit the transaction
             connection.commit()
@@ -110,4 +112,3 @@ class FillDetailsWindow(QMainWindow):
         except sqlite3.Error as e:
             # Display an error message if there's an issue with the database
             QMessageBox.critical(self, "Error", f"An error occurred: {str(e)}")
-

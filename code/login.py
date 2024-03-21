@@ -51,7 +51,7 @@ class Login(QMainWindow):
                 cursor.execute("SELECT * FROM admins WHERE professor_id != ?", (professor_id,))
                 remaining_rows = cursor.fetchall()
 
-                #Swarupa-- Thanks mom
+                #thanks mom
                 cursor.execute("SELECT count(*) FROM admins WHERE professor_id = ?", (professor_id,))
                 row_count = cursor.fetchone()
                 # print("Number of Rows: " , row_count)

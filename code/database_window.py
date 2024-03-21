@@ -18,13 +18,13 @@ class DatabaseWindow(QMainWindow):
         self.cursor = self.db_connection.cursor()
 
         self.tableWidget = QTableWidget(self)
-        self.tableWidget.setGeometry(10, 10, 1050, 600)
+        self.tableWidget.setGeometry(10, 10, 1150, 600)
         self.tableWidget.setRowCount(0)
-        self.tableWidget.setColumnCount(10)  # Increase the column count to accommodate the Reject button
+        self.tableWidget.setColumnCount(11)  # Increase the column count to accommodate the Reject button
 
         # Set column names
         column_names = ["username", "email", "password", "full-name", "branch", "specialization", "Requirement",
-                        "Generate LOR", "Reject", "Delete"]
+                        "Gender","Generate LOR", "Reject", "Delete"]
         self.tableWidget.setHorizontalHeaderLabels(column_names)
 
         self.populate_table(data)
@@ -40,17 +40,17 @@ class DatabaseWindow(QMainWindow):
             # Add delete button to the second last column of each row
             delete_button = QPushButton("Delete")
             delete_button.clicked.connect(lambda _, row=row_num: self.delete_row(row))
-            self.tableWidget.setCellWidget(row_num, 9, delete_button)
+            self.tableWidget.setCellWidget(row_num, 10, delete_button)
 
             # Add "Generate LOR" button to the second last column of each row
             generate_lor_button = QPushButton("Generate LOR")
             generate_lor_button.clicked.connect(lambda _, row=row_num: self.generate_lor(row))
-            self.tableWidget.setCellWidget(row_num, 7, generate_lor_button)
+            self.tableWidget.setCellWidget(row_num, 8, generate_lor_button)
 
             # Add "Reject" button to the last column of each row
             reject_button = QPushButton("Reject")
             reject_button.clicked.connect(lambda _, row=row_num: self.reject_application(row))
-            self.tableWidget.setCellWidget(row_num, 8, reject_button)
+            self.tableWidget.setCellWidget(row_num, 9, reject_button)
 
     def reject_application(self, row):
         try:
@@ -83,9 +83,6 @@ class DatabaseWindow(QMainWindow):
                 smtp.send_message(msg)
         except Exception as e:
             raise e  # Handle the exception appropriately in your application
-
-    # Other methods remain unchanged...
-
 
     def delete_row(self, row):
         # Get username of the row to be deleted
@@ -123,14 +120,25 @@ class DatabaseWindow(QMainWindow):
             branch = self.tableWidget.item(row, 4).text()
             specialization = self.tableWidget.item(row, 5).text()
             phone = self.tableWidget.item(row, 6).text()
+            gender = self.tableWidget.item(row, 7).text()
 
             # Determine the most similar predefined branch
             selected_branch = get_branch_similarity(branch)
 
+            # Determine pronouns based on the gender
+            if gender.lower() == "male":
+                he_or_she = "he"
+                his_or_her = "his"
+                him_or_her = "him"
+            else:
+                he_or_she = "she"
+                his_or_her = "her"
+                him_or_her = "her"
+
             # Get the admin username
             admin_username = self.fetch_admin_username()
 
-            # Fill in the placeholders in the letter template with user details
+            # Fill in the placeholders in the letter template with user details and pronouns
             for paragraph in doc.paragraphs:
                 if "{full_name}" in paragraph.text:
                     paragraph.text = paragraph.text.replace("{full_name}", full_name)
@@ -144,6 +152,13 @@ class DatabaseWindow(QMainWindow):
                     paragraph.text = paragraph.text.replace("{username}", username)
                 if "{admin_username}" in paragraph.text:
                     paragraph.text = paragraph.text.replace("{admin_username}", admin_username)
+                # Add pronouns
+                if "{he_or_she}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{he_or_she}", he_or_she)
+                if "{his_or_her}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{his_or_her}", his_or_her)
+                if "{him_or_her}" in paragraph.text:
+                    paragraph.text = paragraph.text.replace("{him_or_her}", him_or_her)
 
             # Specify the folder path for saving the recommendation letters
             folder_path = f"../All_LORs/{selected_branch}"
@@ -163,7 +178,6 @@ class DatabaseWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error",
                                  f"An error occurred while generating or sharing the recommendation letter: {str(e)}")
-
 
     def fetch_admin_username(self):
         try:
