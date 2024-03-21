@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>727</width>
-    <height>600</height>
+    <width>1110</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,8 +23,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>20</y>
+      <x>100</x>
+      <y>30</y>
       <width>221</width>
       <height>71</height>
      </rect>
@@ -60,8 +60,8 @@ font: 700 24pt &quot;Segoe UI&quot;;</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>220</y>
+      <x>110</x>
+      <y>150</y>
       <width>291</width>
       <height>31</height>
      </rect>
@@ -81,8 +81,8 @@ font: 24pt &quot;Segoe UI&quot;;</string>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>290</y>
+      <x>120</x>
+      <y>280</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -101,8 +101,8 @@ font: 24pt &quot;Segoe UI&quot;;</string>
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>220</y>
+      <x>120</x>
+      <y>210</y>
       <width>241</width>
       <height>31</height>
      </rect>
@@ -115,8 +115,8 @@ font: 16pt &quot;Segoe UI&quot;;</string>
    <widget class="QLineEdit" name="lineEdit_2">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>280</y>
+      <x>120</x>
+      <y>330</y>
       <width>241</width>
       <height>31</height>
      </rect>
@@ -132,8 +132,8 @@ font: 16pt &quot;Segoe UI&quot;;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>370</y>
+      <x>120</x>
+      <y>420</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -150,8 +150,8 @@ font: 16pt &quot;Segoe UI&quot;;</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>470</y>
+      <x>80</x>
+      <y>510</y>
       <width>291</width>
       <height>31</height>
      </rect>
@@ -170,8 +170,8 @@ font: 12pt &quot;Segoe UI&quot;;</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>470</y>
+      <x>400</x>
+      <y>510</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -197,18 +197,29 @@ background-color: rgb(137, 174, 255);
      <string>SignUp</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>0</y>
+      <width>541</width>
+      <height>631</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../office.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>727</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
